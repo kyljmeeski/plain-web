@@ -43,4 +43,9 @@ public class TextResponse implements Response {
         return body;
     }
 
+    @Override
+    public Response with(String key, String value) {
+        headers.add(key, value);
+        return this;
+    }
 }

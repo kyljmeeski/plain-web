@@ -8,4 +8,6 @@ public interface Response {
 
     Body body();
 
+    Response with(String key, String value);
+
 }
