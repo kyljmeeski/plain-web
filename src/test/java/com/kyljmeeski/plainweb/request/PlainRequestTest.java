@@ -1,11 +1,11 @@
 package com.kyljmeeski.plainweb.request;
 
-import com.kyljmeeski.plainweb.Body;
 import com.kyljmeeski.plainweb.HttpMethod;
 import com.kyljmeeski.plainweb.Request;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class PlainRequestTest {
 
