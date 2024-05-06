@@ -1,5 +1,6 @@
 package com.kyljmeeski.plainweb;
 
+import com.kyljmeeski.plainweb.response.EmptyResponse;
 import com.kyljmeeski.plainweb.response.MethodNotAllowedResponse;
 import com.kyljmeeski.plainweb.response.NotFoundResponse;
 
@@ -18,6 +19,9 @@ public class Routes {
             return notFoundResponse;
         }
         if (pair.method == request.method()) {
+            if (pair.route.handle(request) == null) {
+                return new EmptyResponse();
+            }
             return pair.route.handle(request);
         }
         return methodNotAllowedResponse;

@@ -61,9 +61,6 @@ public class PlainWebApp implements WebApp {
                     try {
                         request = new PlainRequest(inputData);
                         response = routes.response(request);
-                        if (response == null) {
-                            response = new EmptyResponse();
-                        }
                     } catch (Exception exception) {
 //                        todo: use BadRequestResponse as well; for that specific client error specific exceptions should be caught
                         response = new InternalServiceErrorResponse();
