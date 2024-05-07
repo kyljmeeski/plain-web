@@ -31,7 +31,7 @@ public class PlainWebApp implements WebApp {
 
     @Override
     public void on(HttpMethod method, String path, Route route) {
-
+        routes.addRoute(method, path, route);
     }
 
     @Override
