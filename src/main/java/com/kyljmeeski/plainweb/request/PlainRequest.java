@@ -5,14 +5,27 @@ import com.kyljmeeski.plainweb.body.PlainBody;
 
 import java.util.Arrays;
 
+/**
+ * Represents an HTTP request received by a web server, parsed from raw byte data.
+ */
 public class PlainRequest implements Request {
 
     private final byte[] bytes;
 
+    /**
+     * Constructs a PlainRequest object with the given byte array representing the HTTP request.
+     *
+     * @param bytes The byte array containing the HTTP request data
+     */
     public PlainRequest(byte[] bytes) {
         this.bytes = bytes;
     }
 
+    /**
+     * Returns the HTTP method of the request (GET, POST, etc.).
+     *
+     * @return The HTTP method of the request
+     */
     @Override
     public HttpMethod method() {
         for (int i = 0; i < bytes.length; i++) {
@@ -24,6 +37,11 @@ public class PlainRequest implements Request {
         return null;
     }
 
+    /**
+     * Returns the path of the request URL.
+     *
+     * @return The path of the request URL
+     */
     @Override
     public String path() {
 //        todo: come up with something other than calling method(), now to extract path, extracting of method is required
@@ -37,6 +55,39 @@ public class PlainRequest implements Request {
         return "";
     }
 
+    /**
+     * Returns the body of the request.
+     *
+     * @return The body of the request
+     */
+    //    todo: somehow document it, how this method works
+    @Override
+    public Body body() {
+        String contentType = headers().get("Content-Type").orElse("text/plain");
+        int contentLength;
+        try {
+            contentLength = Integer.parseInt(headers().get("Content-Length").orElse("0"));
+        } catch (NumberFormatException exception) {
+            contentLength = 0;
+        }
+        if (contentLength == 0) {
+            return new PlainBody(new byte[0], "");
+        }
+        int i = 0;
+        while (i < bytes.length - 3) {
+            i ++;
+            if (bytes[i] == '\r' && bytes[i + 1] == '\n' && bytes[i + 2] == '\r' && bytes[i + 3] == '\n') {
+                break;
+            }
+        }
+        return new PlainBody(Arrays.copyOfRange(bytes, i + 4, i + 4 + contentLength), contentType);
+    }
+
+    /**
+     * Returns the parameters associated with the request.
+     *
+     * @return The parameters associated with the request
+     */
     //    todo: somehow document it, how this method works
     @Override
     public Parameters params() {
@@ -64,6 +115,11 @@ public class PlainRequest implements Request {
         return params;
     }
 
+    /**
+     * Returns the headers of the request.
+     *
+     * @return The headers of the request
+     */
     //    todo: somehow document it, how this method works
     @Override
     public Headers headers() {
@@ -98,29 +154,6 @@ public class PlainRequest implements Request {
             }
         }
         return headers;
-    }
-
-    //    todo: somehow document it, how this method works
-    @Override
-    public Body body() {
-        String contentType = headers().get("Content-Type").orElse("text/plain");
-        int contentLength;
-        try {
-            contentLength = Integer.parseInt(headers().get("Content-Length").orElse("0"));
-        } catch (NumberFormatException exception) {
-            contentLength = 0;
-        }
-        if (contentLength == 0) {
-            return new PlainBody(new byte[0], "");
-        }
-        int i = 0;
-        while (i < bytes.length - 3) {
-            i ++;
-            if (bytes[i] == '\r' && bytes[i + 1] == '\n' && bytes[i + 2] == '\r' && bytes[i + 3] == '\n') {
-                break;
-            }
-        }
-        return new PlainBody(Arrays.copyOfRange(bytes, i + 4, i + 4 + contentLength), contentType);
     }
 
 }
