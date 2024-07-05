@@ -1,5 +1,8 @@
 package com.kyljmeeski.plainweb;
 
+/**
+ * Represents standard HTTP status codes with their corresponding phrases.
+ */
 public enum HttpStatus {
 
     CONTINUE(100, "Continue"), SWITCHING_PROTOCOLS(101, "Switching Protocols"), PROCESSING(102, "Processing"), EARLY_HITS(103, "Early hints"),
@@ -28,24 +31,50 @@ public enum HttpStatus {
     private final int code;
     private final String phrase;
 
+    /**
+     * Constructs an HttpStatus enum with the specified status code and phrase.
+     *
+     * @param code   The HTTP status code
+     * @param phrase The corresponding phrase for the status code
+     */
     HttpStatus(int code, String phrase) {
         this.code = code;
         this.phrase = phrase;
     }
 
+    /**
+     * Returns the HTTP status code.
+     *
+     * @return The HTTP status code
+     */
     public int code() {
         return code;
     }
 
+    /**
+     * Returns the corresponding phrase for the HTTP status code.
+     *
+     * @return The corresponding phrase
+     */
     public String phrase() {
         return phrase;
     }
 
+    /**
+     * Returns a string representation of the HTTP status in the format "HTTP/1.1 code phrase\r\n".
+     *
+     * @return A string representation of the HTTP status
+     */
     @Override
     public String toString() {
         return "HTTP/1.1 " + code + " " + phrase + "\r\n";
     }
 
+    /**
+     * Returns the HTTP status as a byte array representation.
+     *
+     * @return The HTTP status as a byte array
+     */
     public byte[] bytes() {
         return toString().getBytes();
     }
